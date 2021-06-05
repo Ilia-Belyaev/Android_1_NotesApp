@@ -30,6 +30,9 @@ public class NoteFragment extends Fragment {
         fragment.setArguments(args);
         return fragment;
     }
+    public NoteFragment(){
+
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -49,11 +52,11 @@ public class NoteFragment extends Fragment {
                     theme.getText().toString(),
                     note.getText().toString()
             ));
-
         });
 
         return view;
     }
+
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
@@ -61,12 +64,6 @@ public class NoteFragment extends Fragment {
         theme.setText(noteEntity.theme);
         note.setText(noteEntity.note);
     }
-
-//    @Override
-//    public void onSaveInstanceState(@NonNull Bundle outState) {
-//        super.onSaveInstanceState(outState);
-//
-//    }
 
     public interface Controller {
         void saveResult(NoteEntity noteEntity);

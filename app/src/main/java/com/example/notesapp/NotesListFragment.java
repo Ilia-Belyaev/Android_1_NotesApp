@@ -52,6 +52,7 @@ public class NotesListFragment extends Fragment {
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
+
         if (!(context instanceof Controller)) {
             throw new RuntimeException("Activity must implement ProfileListFragment.Controller");
         }
