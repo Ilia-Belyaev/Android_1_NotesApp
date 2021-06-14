@@ -2,87 +2,85 @@ package com.example.notesapp;
 
 import android.content.Context;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 
-import java.util.Objects;
-
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
 
 public class NoteFragment extends Fragment {
-    public static final String DOSSIER_ARGS_KEY = "DOSSIER_ARGS_KEY";
+    private static final String NOTE_EXTRA_KEY = "NOTE_EXTRA_KEY";
     private Button saveButton;
-    private NoteEntity noteEntity = null;
-    private EditText theme;
-    private EditText note;
+    private EditText themeEditText;
+    private EditText descriptionNote;
 
-    public static NoteFragment newInstance(NoteEntity noteEntity) {
+    @Nullable
+    private NoteEntity note = null;
+
+    public static NoteFragment newInstance(@Nullable NoteEntity note) {
         NoteFragment fragment = new NoteFragment();
-        Bundle args = new Bundle();
-        args.putParcelable(DOSSIER_ARGS_KEY, noteEntity);
-        fragment.setArguments(args);
+        Bundle bundle = new Bundle();
+        bundle.putParcelable(NOTE_EXTRA_KEY, note);
+        fragment.setArguments(bundle);
+
         return fragment;
     }
-    public NoteFragment(){
-
-    }
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-    }
-
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.note_fragment, null);
-        theme = view.findViewById(R.id.subject_of_the_note);
-        note = view.findViewById(R.id.description_of_the_note);
-        saveButton = view.findViewById(R.id.save_note);
-        saveButton.setOnClickListener(v -> {
-            Controller controller = (Controller) getActivity();
-            controller.saveResult(new NoteEntity(
-                    theme.getText().toString(),
-                    note.getText().toString()
-            ));
-        });
-
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.note_fragment, container, false);
+        saveButton = view.findViewById(R.id.save_button);
+        themeEditText = view.findViewById(R.id.theme_edit_text);
+        descriptionNote = view.findViewById(R.id.description_edit_text);
         return view;
     }
 
-
     @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-//        super.onViewCreated(view, savedInstanceState);
-        theme.setText(noteEntity.theme);
-        note.setText(noteEntity.note);
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        note = getArguments().getParcelable(NOTE_EXTRA_KEY);
+        getActivity().setTitle(note == null ? R.string.create_note_title : R.string.edit_note_title);
+        fillNote(note);
+        saveButton.setOnClickListener(v -> {
+            getContract().saveNote(gatherNote());
+        });
     }
 
-    public interface Controller {
-        void saveResult(NoteEntity noteEntity);
+    private void fillNote(NoteEntity note) {
+        if (note == null) return;
+        themeEditText.setText(note.title);
+        descriptionNote.setText(note.text);
     }
 
+    private NoteEntity gatherNote() {
+        return new NoteEntity(
+                note == null ? NoteEntity.generateId() : note.id,
+                themeEditText.getText().toString(),
+                note == null ? NoteEntity.getCurrentDate() : note.creatingDate,
+                descriptionNote.getText().toString());
+
+    }
+
+    interface Contract {
+        void saveNote(NoteEntity noteEntity);
+
+    }
+
+    private Contract getContract() {
+        return (Contract) getActivity();
+    }
+
+
     @Override
-    public void onAttach(Context context) {
+    public void onAttach(@NonNull Context context) {
         super.onAttach(context);
-        if (!(context instanceof Controller)) {
-            throw new RuntimeException("Activity must implement ProfileFragment.Controller");
+        if (!(context instanceof Contract)) {
+            throw new IllegalStateException("Activity must implement Contract");
         }
-        if (getArguments() != null) {
-            noteEntity = getArguments().getParcelable(DOSSIER_ARGS_KEY);
-        }
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-
     }
 }
+
+

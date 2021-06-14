@@ -1,54 +1,91 @@
 package com.example.notesapp;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentTransaction;
 
-import android.content.Context;
-import android.content.res.Configuration;
-import android.graphics.Color;
 import android.os.Bundle;
-import android.widget.LinearLayout;
-import android.widget.TextView;
+import android.view.MenuItem;
 
-import java.util.HashMap;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 
-public class MainActivity extends AppCompatActivity implements NotesListFragment.Controller, NoteFragment.Controller {
-    private static LinearLayout linearLayout;
-    private HashMap<String, String> noteInfo = new HashMap<>();
+public class MainActivity extends AppCompatActivity implements NotesListFragment.Contract, NoteFragment.Contract {
+    private static final String NOTES_LIST_FRAGMENT_TAG = "NOTES_LIST_FRAGMENT_TAG";
+    private boolean isTwoPanelMode = false;
+    private BottomNavigationView navView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        isTwoPanelMode = findViewById(R.id.optional_fragment_container) != null;
+        showNoteList();
+        navView = findViewById(R.id.navigation_view);
+        navView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                switch (item.getItemId()) {
+                    case R.id.note_list_fragment:
+                        showNoteList();
+                        break;
+                    case R.id.note_fragment:
+                        showThisNote();
+                        break;
+                    case R.id.settings:
+                        showSettings();
+                        break;
+
+                }
+                return true;
+            }
+        });
+    }
+
+    private void showSettings() {
+        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+        if (!isTwoPanelMode) {
+            fragmentTransaction.addToBackStack(null);
+        }
+        fragmentTransaction.replace(isTwoPanelMode ? R.id.optional_fragment_container : R.id.main_fragment_container, new Settings());
+        fragmentTransaction.commit();
+    }
+
+    private void showNoteList() {
         getSupportFragmentManager()
                 .beginTransaction()
-                .add(R.id.fragment_layout, new NotesListFragment())
+                .replace(R.id.main_fragment_container, new NotesListFragment(), NOTES_LIST_FRAGMENT_TAG)
                 .commit();
+    }
 
-        linearLayout = findViewById(R.id.linear_layout);
+    private void showThisNote() {
+        showThisNote(null);
+    }
+
+    private void showThisNote(@Nullable NoteEntity note) {
+        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+        if (!isTwoPanelMode) {
+            fragmentTransaction.addToBackStack(null);
+        }
+        fragmentTransaction.replace(isTwoPanelMode ? R.id.optional_fragment_container : R.id.main_fragment_container, NoteFragment.newInstance(note));
+        fragmentTransaction.commit();
     }
 
     @Override
-    public void saveResult(NoteEntity noteEntity) {
-        String note = noteEntity.note;
-        String themeNote = noteEntity.theme;
-        noteInfo.put(note,themeNote);
-        getSupportFragmentManager().popBackStack();
-        TextView textView = new TextView(this);
-        textView.setText(note);
-        textView.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
-        textView.setTextColor(Color.parseColor("#ffffff"));
-        linearLayout.addView(textView);
-
+    public void createNewNote() {
+        showThisNote();
     }
 
     @Override
-    public void createNewNote(NoteEntity noteEntity) {
-        boolean isLandscape = getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE;
-        getSupportFragmentManager()
-                .beginTransaction()
-                .add(isLandscape ? R.id.detail_container : R.id.fragment_layout, NoteFragment.newInstance(noteEntity))
-                .addToBackStack(null)
-                .commit();
+    public void editNote(NoteEntity note) {
+        showThisNote(note);
+    }
 
+    @Override
+    public void saveNote(NoteEntity note) {
+        getSupportFragmentManager().popBackStackImmediate();
+        NotesListFragment notesListFragment = (NotesListFragment) getSupportFragmentManager()
+                .findFragmentByTag(NOTES_LIST_FRAGMENT_TAG);
+        notesListFragment.addNote(note);
     }
 }
-
