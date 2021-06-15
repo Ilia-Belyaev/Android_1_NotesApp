@@ -1,8 +1,0 @@
-<resources>
-    <string name="app_name">NotesApp</string>
-
-    <string name="create_note">Create note</string>
-    <string name="write">Write...</string>
-    <string name="note_theme">Theme</string>
-    <string name="save_note">Save</string>
-</resources>
