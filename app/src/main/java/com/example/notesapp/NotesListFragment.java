@@ -11,25 +11,32 @@ import android.widget.LinearLayout;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class NotesListFragment extends Fragment {
     private final ArrayList<NoteEntity> noteList = new ArrayList<>();
-    private LinearLayout listLinearLayout;
+    private RecyclerView recyclerView;
+    private NotesAdapter adapter;
     private static final String PREF_NAME = "notes";
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.notes_list_fragment, container, false);
-        listLinearLayout = view.findViewById(R.id.list_layout);
+        recyclerView = view.findViewById(R.id.recycler_view);
 
         return view;
     }
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
+        adapter = new NotesAdapter();
+        adapter.setOnItemClickListener(getContract()::editNote);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        recyclerView.setAdapter(adapter);
         renderList(noteList);
 
     }
@@ -45,17 +52,7 @@ public class NotesListFragment extends Fragment {
     }
 
     private void renderList(List<NoteEntity> notes) {
-        listLinearLayout.removeAllViews();
-        for (NoteEntity note : notes) {
-            Button button = new Button(getContext());
-            button.setText(note.title);
-            button.setOnClickListener(v -> {
-                getContract().editNote(note);
-            });
-
-            listLinearLayout.addView(button);
-
-        }
+        adapter.setData(notes);
     }
 
 

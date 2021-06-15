@@ -9,10 +9,10 @@
     android:orientation="vertical"
     tools:context=".NotesListFragment">
 
-    <LinearLayout
-        android:id="@+id/list_layout"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recycler_view"
+        android:layout_width="@dimen/layout_width"
+        android:layout_height="@dimen/layout_height"
         android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
