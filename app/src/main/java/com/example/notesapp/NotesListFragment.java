@@ -58,8 +58,6 @@ public class NotesListFragment extends Fragment {
         }
     }
 
-    private View.OnClickListener itemClickListener = view -> getContract().editNote(null);
-
 
     @Override
     public void onAttach(@NonNull Context context) {

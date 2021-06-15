@@ -28,7 +28,7 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/button_height"
         android:text="@string/save_button"
-        app:backgroundTint="#A386E3"
+        app:backgroundTint="@color/save_button_color"
         app:cornerRadius="@dimen/corner_radius_button" />
 
 

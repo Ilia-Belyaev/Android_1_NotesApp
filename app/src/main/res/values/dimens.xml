@@ -3,4 +3,6 @@
     <dimen name="default_padding">16dp</dimen>
     <dimen name="button_height">72dp</dimen>
     <dimen name="corner_radius_button">30dp</dimen>
+    <dimen name="layout_width">0dp</dimen>
+    <dimen name="layout_height">0dp</dimen>
 </resources>

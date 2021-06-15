@@ -47,14 +47,14 @@ public class MainActivity extends AppCompatActivity implements NotesListFragment
         if (!isTwoPanelMode) {
             fragmentTransaction.addToBackStack(null);
         }
-        fragmentTransaction.replace(isTwoPanelMode ? R.id.optional_fragment_container : R.id.main_fragment_container, new Settings());
+        fragmentTransaction.add(isTwoPanelMode ? R.id.optional_fragment_container : R.id.main_fragment_container, new Settings());
         fragmentTransaction.commit();
     }
 
     private void showNoteList() {
         getSupportFragmentManager()
                 .beginTransaction()
-                .replace(R.id.main_fragment_container, new NotesListFragment(), NOTES_LIST_FRAGMENT_TAG)
+                .add(R.id.main_fragment_container, new NotesListFragment(), NOTES_LIST_FRAGMENT_TAG)
                 .commit();
     }
 
@@ -67,7 +67,7 @@ public class MainActivity extends AppCompatActivity implements NotesListFragment
         if (!isTwoPanelMode) {
             fragmentTransaction.addToBackStack(null);
         }
-        fragmentTransaction.replace(isTwoPanelMode ? R.id.optional_fragment_container : R.id.main_fragment_container, NoteFragment.newInstance(note));
+        fragmentTransaction.add(isTwoPanelMode ? R.id.optional_fragment_container : R.id.main_fragment_container, NoteFragment.newInstance(note));
         fragmentTransaction.commit();
     }
 
@@ -83,6 +83,7 @@ public class MainActivity extends AppCompatActivity implements NotesListFragment
 
     @Override
     public void saveNote(NoteEntity note) {
+        setTitle(R.string.app_name);
         getSupportFragmentManager().popBackStackImmediate();
         NotesListFragment notesListFragment = (NotesListFragment) getSupportFragmentManager()
                 .findFragmentByTag(NOTES_LIST_FRAGMENT_TAG);

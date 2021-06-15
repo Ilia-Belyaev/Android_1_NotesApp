@@ -42,7 +42,6 @@ public class NoteFragment extends Fragment {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         note = getArguments().getParcelable(NOTE_EXTRA_KEY);
-        getActivity().setTitle(note == null ? R.string.create_note_title : R.string.edit_note_title);
         fillNote(note);
         saveButton.setOnClickListener(v -> {
             getContract().saveNote(gatherNote());
