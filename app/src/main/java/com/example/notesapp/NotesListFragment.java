@@ -17,7 +17,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 import java.util.List;
 
-public class NotesListFragment extends Fragment {
+public class NotesListFragment extends Fragment{ //implements CardSource{
     private final ArrayList<NoteEntity> noteList = new ArrayList<>();
     private RecyclerView recyclerView;
     private NotesAdapter adapter;
@@ -63,6 +63,10 @@ public class NotesListFragment extends Fragment {
             throw new IllegalStateException("Activity must implement Contract");
         }
     }
+//    @Override
+//    public void deleteCardData(int position) {
+//        noteList.remove(position);
+//    }
 
 
     @Nullable
