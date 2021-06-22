@@ -2,59 +2,89 @@ package com.example.notesapp;
 
 import android.content.Context;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
 
-import java.util.Objects;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
 
+import java.util.ArrayList;
+import java.util.List;
 
 public class NotesListFragment extends Fragment {
-    private final NoteEntity noteEntity1 = new NoteEntity("", "");
+    private final ArrayList<NoteEntity> noteList = new ArrayList<>();
+    private LinearLayout listLinearLayout;
+    private static final String PREF_NAME = "notes";
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-    }
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.notes_list_fragment, container, false);
+        listLinearLayout = view.findViewById(R.id.list_layout);
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.notes_list_fragment, null);
-    }
-
-    private void addNoteToList(NoteEntity noteEntity) {
-        Button button = requireView().findViewById(R.id.create_note);
-        button.setOnClickListener(v -> {
-            ((Controller) getActivity()).createNewNote(noteEntity);
-        });
+        return view;
     }
 
     @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        LinearLayout linearLayout = view.findViewById(R.id.linear);
-        addNoteToList(noteEntity1);
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        renderList(noteList);
+
     }
 
-    interface Controller {
-        void createNewNote(NoteEntity noteEntity);
+    interface Contract {
+        void createNewNote();
+
+        void editNote(NoteEntity note);
     }
+
+    private Contract getContract() {
+        return (Contract) getActivity();
+    }
+
+    private void renderList(List<NoteEntity> notes) {
+        listLinearLayout.removeAllViews();
+        for (NoteEntity note : notes) {
+            Button button = new Button(getContext());
+            button.setText(note.title);
+            button.setOnClickListener(v -> {
+                getContract().editNote(note);
+            });
+
+            listLinearLayout.addView(button);
+
+        }
+    }
+
 
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
-
-        if (!(context instanceof Controller)) {
-            throw new RuntimeException("Activity must implement ProfileListFragment.Controller");
+        if (!(context instanceof Contract)) {
+            throw new IllegalStateException("Activity must implement Contract");
         }
     }
+
+
+    @Nullable
+    private NoteEntity findNoteWithId(String id) {
+        for (NoteEntity note : noteList) {
+            if (note.id.equals(id)) {
+                return note;
+            }
+        }
+        return null;
+    }
+
+    public void addNote(NoteEntity noteEntity) {
+        NoteEntity sameNote = findNoteWithId(noteEntity.id);
+        if (sameNote != null) {
+            noteList.remove(sameNote);
+        }
+        noteList.add(noteEntity);
+        renderList(noteList);
+    }
+
 }

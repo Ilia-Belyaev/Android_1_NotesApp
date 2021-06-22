@@ -1,0 +1,16 @@
+<resources>
+    <string name="app_name">NotesApp</string>
+
+    <string name="create_note">Create note</string>
+    <string name="write">Write...</string>
+    <string name="note_theme">Theme</string>
+    <string name="save_note">Save</string>
+    <string name="theme">Тема</string>
+    <string name="description_note">Заметка</string>
+    <string name="save_button">Сохранить</string>
+    <string name="menu">Меню</string>
+    <string name="add">Новая заметка</string>
+    <string name="settings">Настройки</string>
+    <string name="create_note_title">Создать новую заметку</string>
+    <string name="edit_note_title">Редактировать</string>
+</resources>

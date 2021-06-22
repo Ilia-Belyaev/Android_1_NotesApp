@@ -1,0 +1,23 @@
+com/example/notesapp/NoteFragment.java
+ com.example.notesapp.NoteFragment
+ com.example.notesapp.NoteFragment$Contract
+com/example/notesapp/Info.java
+ com.example.notesapp.Info
+com/example/notesapp/NoteEntity.java
+ com.example.notesapp.NoteEntity
+ com.example.notesapp.NoteEntity$1
+com/example/notesapp/BuildConfig.java
+ com.example.notesapp.BuildConfig
+com/example/notesapp/NoteViewHolder.java
+ com.example.notesapp.NoteViewHolder
+com/example/notesapp/NotesAdapter.java
+ com.example.notesapp.NotesAdapter
+ com.example.notesapp.NotesAdapter$OnItemClickListener
+com/example/notesapp/CardSource.java
+ com.example.notesapp.CardSource
+com/example/notesapp/MainActivity.java
+ com.example.notesapp.MainActivity
+ com.example.notesapp.MainActivity$1
+com/example/notesapp/NotesListFragment.java
+ com.example.notesapp.NotesListFragment
+ com.example.notesapp.NotesListFragment$Contract
