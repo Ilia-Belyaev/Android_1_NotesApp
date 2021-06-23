@@ -7,11 +7,14 @@ import java.util.Calendar;
 import java.util.UUID;
 
 public class NoteEntity implements Parcelable {
-    public final String id;
-    public final String title;
-    public final long creatingDate;
-    public final String text;
+    public  String id;
+    public  String title;
+    public  long creatingDate;
+    public  String text;
 
+    public NoteEntity() {
+
+    }
     public NoteEntity(String id, String title, long date, String text) {
         this.id = id;
         this.title = title;
@@ -19,11 +22,29 @@ public class NoteEntity implements Parcelable {
         this.text = text;
     }
 
+
+
     protected NoteEntity(Parcel in) {
         id = in.readString();
         title = in.readString();
         creatingDate = in.readLong();
         text = in.readString();
+    }
+
+    public long getCreatingDate() {
+        return creatingDate;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public String getText() {
+        return text;
     }
 
     public static long getCurrentDate() {

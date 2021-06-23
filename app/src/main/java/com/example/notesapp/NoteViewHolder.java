@@ -17,12 +17,10 @@ public class NoteViewHolder extends RecyclerView.ViewHolder {
     private final TextView descriptionTextView;
     private final CardView cardView;
     private NoteEntity noteEntity;
-//    private CardSource data;
 
     public NoteViewHolder(@NonNull ViewGroup parent, @Nullable NotesAdapter.OnItemClickListener clickListener) {
         super(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_note, parent, false));
         cardView = (CardView) itemView;
-//        int position = NotesAdapter.getMenuPosition();
         subjectTextView = itemView.findViewById(R.id.theme_text_view);
         descriptionTextView = itemView.findViewById(R.id.description_text_view);
         itemView.setOnClickListener(v -> {
@@ -35,8 +33,7 @@ public class NoteViewHolder extends RecyclerView.ViewHolder {
                         clickListener.onItemClick(noteEntity);
                         break;
                     case R.id.delete_note:
-//                        data.deleteCardData(position);
-//                        NotesAdapter.notifyItemRemoved(position);
+                        //todo
                         break;
                 }
                 return true;
@@ -46,7 +43,7 @@ public class NoteViewHolder extends RecyclerView.ViewHolder {
         cardView.setCardBackgroundColor(new Random().nextInt());
     }
 
-    public void bind(NoteEntity noteEntity) {
+    public void bind(NoteEntity noteEntity,String id) {
         this.noteEntity = noteEntity;
         subjectTextView.setText(noteEntity.title);
         descriptionTextView.setText(noteEntity.text);
