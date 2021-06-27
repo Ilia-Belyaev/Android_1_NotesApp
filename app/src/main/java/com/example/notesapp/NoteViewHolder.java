@@ -1,5 +1,6 @@
 package com.example.notesapp;
 
+import android.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 import android.widget.PopupMenu;
@@ -33,7 +34,18 @@ public class NoteViewHolder extends RecyclerView.ViewHolder {
                         clickListener.onItemClick(noteEntity);
                         break;
                     case R.id.delete_note:
-                        //todo
+                        new AlertDialog.Builder(itemView.getContext())
+                                .setTitle(R.string.alert)
+                                .setIcon(R.drawable.ic_alert)
+                                .setMessage(R.string.alert_message)
+                                .setCancelable(false)
+                                .setPositiveButton(R.string.yes,(d,i)->{
+                                    //todo удаляем заметку
+                                })
+                                .setNegativeButton(R.string.no,(d,i)->{
+                                    //todo просто закрываем окно
+                                })
+                                .show();
                         break;
                 }
                 return true;
