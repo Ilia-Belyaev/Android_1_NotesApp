@@ -10,10 +10,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class NotesAdapter extends RecyclerView.Adapter<NoteViewHolder> {
-//    private static int menuPosition;
     private List<NoteEntity> data = new ArrayList<>();
     private OnItemClickListener onItemClickListener;
-
+    private String id;
     interface OnItemClickListener {
         void onItemClick(NoteEntity note);
     }
@@ -23,15 +22,9 @@ public class NotesAdapter extends RecyclerView.Adapter<NoteViewHolder> {
         this.onItemClickListener = onItemClickListener;
     }
 
-
-//    public static int getMenuPosition() {
-//        return menuPosition;
-//    }
-
-
-    public void setData(List<NoteEntity> notes) {
+    public void setData(List<NoteEntity> notes,String id) {
         data = notes;
-        notifyDataSetChanged();
+        this.id = id;
     }
 
     @NonNull
@@ -42,7 +35,7 @@ public class NotesAdapter extends RecyclerView.Adapter<NoteViewHolder> {
 
     @Override
     public void onBindViewHolder(@NonNull NoteViewHolder holder, int position) {
-        holder.bind(data.get(position));
+        holder.bind(data.get(position),id);
     }
 
     @Override

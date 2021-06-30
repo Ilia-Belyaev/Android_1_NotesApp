@@ -6,7 +6,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.LinearLayout;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -15,12 +14,17 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.UUID;
 
-public class NotesListFragment extends Fragment{ //implements CardSource{
+public class NotesListFragment extends Fragment{
     private final ArrayList<NoteEntity> noteList = new ArrayList<>();
     private RecyclerView recyclerView;
     private NotesAdapter adapter;
+//    private Button buttonCreateNote;
+    private final String uid = UUID.randomUUID().toString();
+    private FirebaseRepository repo;
     private static final String PREF_NAME = "notes";
 
     @Override
@@ -30,14 +34,24 @@ public class NotesListFragment extends Fragment{ //implements CardSource{
 
         return view;
     }
-
+    private final Runnable subscriber = () -> {
+        updateAllNotes(noteList);
+    };
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         adapter = new NotesAdapter();
         adapter.setOnItemClickListener(getContract()::editNote);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setAdapter(adapter);
-        renderList(noteList);
+        repo = new FirebaseRepository();
+
+        updateAllNotes(noteList);
+
+//        buttonCreateNote.setOnClickListener(v -> {
+//            getContract().createNewNote();
+//        });
+
+        repo.subscribe(subscriber);
 
     }
 
@@ -51,9 +65,6 @@ public class NotesListFragment extends Fragment{ //implements CardSource{
         return (Contract) getActivity();
     }
 
-    private void renderList(List<NoteEntity> notes) {
-        adapter.setData(notes);
-    }
 
 
     @Override
@@ -63,10 +74,13 @@ public class NotesListFragment extends Fragment{ //implements CardSource{
             throw new IllegalStateException("Activity must implement Contract");
         }
     }
-//    @Override
-//    public void deleteCardData(int position) {
-//        noteList.remove(position);
-//    }
+    private void updateAllNotes(List<NoteEntity> notes) {
+        adapter.setData(notes, uid);
+        List<NoteEntity> sortedNotes = repo.getNotes();
+        Collections.sort(sortedNotes, (o1, o2) -> o1.getCreatingDate() > o2.getCreatingDate() ? 1 : -1);
+        adapter.setData(sortedNotes, uid);
+        adapter.notifyDataSetChanged();
+    }
 
 
     @Nullable
@@ -85,7 +99,8 @@ public class NotesListFragment extends Fragment{ //implements CardSource{
             noteList.remove(sameNote);
         }
         noteList.add(noteEntity);
-        renderList(noteList);
+        FirebaseRepository.sendNote(noteEntity);
+        updateAllNotes(noteList);
     }
 
 }
