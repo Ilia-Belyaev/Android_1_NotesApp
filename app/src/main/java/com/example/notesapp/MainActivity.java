@@ -47,7 +47,7 @@ public class MainActivity extends AppCompatActivity implements NotesListFragment
         if (!isTwoPanelMode) {
             fragmentTransaction.addToBackStack(null);
         }
-        fragmentTransaction.add(isTwoPanelMode ? R.id.optional_fragment_container : R.id.main_fragment_container, new Settings());
+        fragmentTransaction.replace(isTwoPanelMode ? R.id.optional_fragment_container : R.id.main_fragment_container, new Info());
         fragmentTransaction.commit();
     }
 
@@ -67,7 +67,7 @@ public class MainActivity extends AppCompatActivity implements NotesListFragment
         if (!isTwoPanelMode) {
             fragmentTransaction.addToBackStack(null);
         }
-        fragmentTransaction.add(isTwoPanelMode ? R.id.optional_fragment_container : R.id.main_fragment_container, NoteFragment.newInstance(note));
+        fragmentTransaction.replace(isTwoPanelMode ? R.id.optional_fragment_container : R.id.main_fragment_container, NoteFragment.newInstance(note));
         fragmentTransaction.commit();
     }
 

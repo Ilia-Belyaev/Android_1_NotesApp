@@ -13,4 +13,7 @@
     <string name="settings">Настройки</string>
     <string name="create_note_title">Создать новую заметку</string>
     <string name="edit_note_title">Редактировать</string>
+    <string name="refactor">Редактировать</string>
+    <string name="delete">Удалить</string>
+    <string name="info">Это приложение заметки. 2021 год.</string>
 </resources>

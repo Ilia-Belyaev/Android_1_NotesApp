@@ -4,22 +4,18 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.RadioButton;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatDelegate;
 import androidx.fragment.app.Fragment;
 
-public class Settings extends Fragment {
+public class Info extends Fragment {
     private int numberCode;
 
-    public Settings() {
+    public Info() {
         // Required empty public constructor
     }
 
-    public static Settings newInstance() {
-        Settings fragment = new Settings();
+    public static Info newInstance() {
+        Info fragment = new Info();
         Bundle args = new Bundle();
         fragment.setArguments(args);
         return fragment;

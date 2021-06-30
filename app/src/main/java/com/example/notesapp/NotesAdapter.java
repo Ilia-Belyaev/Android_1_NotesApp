@@ -1,6 +1,6 @@
 package com.example.notesapp;
 
-import android.view.View;
+
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class NotesAdapter extends RecyclerView.Adapter<NoteViewHolder> {
+//    private static int menuPosition;
     private List<NoteEntity> data = new ArrayList<>();
     private OnItemClickListener onItemClickListener;
 
@@ -17,9 +18,16 @@ public class NotesAdapter extends RecyclerView.Adapter<NoteViewHolder> {
         void onItemClick(NoteEntity note);
     }
 
+
     public void setOnItemClickListener(OnItemClickListener onItemClickListener) {
         this.onItemClickListener = onItemClickListener;
     }
+
+
+//    public static int getMenuPosition() {
+//        return menuPosition;
+//    }
+
 
     public void setData(List<NoteEntity> notes) {
         data = notes;
